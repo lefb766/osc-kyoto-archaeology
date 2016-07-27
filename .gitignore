@@ -1,0 +1,4 @@
+node_modules/
+gathered_tweets/
+*.js
+config.json

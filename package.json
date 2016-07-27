@@ -1,0 +1,17 @@
+{
+  "name": "osc-kyoto-archaeology",
+  "version": "0.1.0",
+  "description": "#OSC京都考古学",
+  "author": "Nobuhiro Nakamura <lefb766@live.jp>",
+  "license": "MIT",
+  "scripts": {
+    "prepublish": "tsc"
+  },
+  "dependencies": {
+    "twitter": "^1.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^4.0.30",
+    "typescript": "^2.0.0"
+  }
+}
