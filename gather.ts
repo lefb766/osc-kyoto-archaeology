@@ -38,7 +38,7 @@ client.stream('statuses/filter', {track: '#OSC京都考古学'}, (stream) => {
     stream.on('data', tweet => {
         if (!tweet.retweeted_status) { // not a retweet
             saveTweetTo(saveDir, tweet);
-            console.log([tweet.user.screen_name, ': ', tweet.text].join());
+            console.log([tweet.user.screen_name, ': ', tweet.text].join(''));
         }
     });
 });
