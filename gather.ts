@@ -1,10 +1,15 @@
 import Twitter = require('twitter');
 import fs = require('fs');
 import path = require('path');
+import yargs = require('yargs');
 
 function main() {
     const config = require('./config.json') as Config;
     const saveDir = 'gathered_tweets';
+
+    const argv = yargs
+        .default('t', '#OSC京都考古学')
+        .argv as Args;
 
     let client = new Twitter(config);
 
@@ -14,7 +19,7 @@ function main() {
         fs.mkdirSync(saveDir);
     }
 
-    client.stream('statuses/filter', {track: '#OSC京都考古学'}, (stream) => {
+    client.stream('statuses/filter', {track: argv.t}, (stream) => {
         stream.on('data', tweet => {
             if (!tweet.retweeted_status) { // not a retweet
                 saveTweetTo(saveDir, tweet);
@@ -26,6 +31,10 @@ function main() {
 
 declare module 'fs' {
     function writeFile(fd: number, content: any, callback :any);
+}
+
+interface Args {
+    t: string;
 }
 
 interface Config {
