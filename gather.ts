@@ -19,12 +19,22 @@ function main() {
         fs.mkdirSync(saveDir);
     }
 
+    client.get('search/tweets', {q: argv.t}, (err, tweets, res) => {
+        if (err) {
+            console.log(err);
+            console.log(res);
+            return;
+        }
+
+        for (let t of tweets.statuses) {
+            saveTweetTo(saveDir, t);
+        }
+    });
+
     client.stream('statuses/filter', {track: argv.t}, (stream) => {
         stream.on('data', tweet => {
-            if (!tweet.retweeted_status) { // not a retweet
-                saveTweetTo(saveDir, tweet);
-                console.log([tweet.user.screen_name, ': ', tweet.text].join(''));
-            }
+            saveTweetTo(saveDir, tweet);
+            console.log([tweet.user.screen_name, ': ', tweet.text].join(''));
         });
     });
 }
@@ -45,6 +55,10 @@ interface Config {
 }
 
 function saveTweetTo(dir: string, tweet: any) {
+    if (tweet.retweeted_status) { // retweet
+        return;
+    }
+
     fs.open(path.join(dir, tweet.id_str + '.json'), 'w', (err, fd) => {
         if (err) {
             console.log("fs.open: " + typeof err);
