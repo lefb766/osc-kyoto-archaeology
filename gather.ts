@@ -19,7 +19,7 @@ function main() {
         fs.mkdirSync(saveDir);
     }
 
-    client.get('search/tweets', {q: argv.t}, (err, tweets, res) => {
+    client.get('search/tweets', {q: argv.t, result_type: 'recent'}, (err, tweets, res) => {
         if (err) {
             console.log(err);
             console.log(res);
