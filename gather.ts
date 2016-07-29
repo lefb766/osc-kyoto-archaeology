@@ -59,13 +59,25 @@ function saveTweetTo(dir: string, tweet: any) {
         return;
     }
 
-    fs.open(path.join(dir, tweet.id_str + '.json'), 'w', (err, fd) => {
-        if (err) {
-            console.log("fs.open: " + typeof err);
-        } else {
-            fs.writeFile(fd, JSON.stringify(tweet), console.log.bind(console));
-        }
-    })
+    let savePath = path.join(dir, tweet.id_str + '.json');
+
+    try {
+        fs.accessSync(savePath);
+    } catch (e) {
+        // file does not exist
+
+        fs.open(savePath, 'w', (err, fd) => {
+            if (err) {
+                console.log("fs.open: " + typeof err);
+            } else {
+                fs.writeFile(fd, JSON.stringify(tweet), console.log.bind(console));
+            }
+        });
+
+        return;
+    }
+
+    console.log('[Info] ' + savePath + ' already exists.');
 }
 
 main();
